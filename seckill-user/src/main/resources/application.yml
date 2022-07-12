@@ -1,4 +1,7 @@
 spring:
+  spring:
+    profiles:
+      active: dev
   datasource:
     username: root
     password: root
