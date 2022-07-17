@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: dev
+# 放行白名单
+secure:
+  ignore:
+    urls:
+      - "/user/login"

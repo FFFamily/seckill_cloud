@@ -2,12 +2,9 @@ package com.tutu.service;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.tutu.common.constants.Constants;
 import com.tutu.common.enums.UserTypeEnum;
 import com.tutu.common.exception.BusinessException;
 import com.tutu.common.exception.LoginException;
-import com.tutu.common.utils.IdWorkerUtil;
-import com.tutu.common.utils.JwtUtil;
 import com.tutu.entity.SeUser;
 import com.tutu.mapper.SeUserMapper;
 import com.tutu.vo.LoginVo;
@@ -30,9 +27,6 @@ public class SeUserService {
 
     @Resource
     private SeUserMapper seUserMapper;
-
-    @Resource
-    private JwtUtil jwtConfig;
 
     /**
      * 根据手机号查询用户

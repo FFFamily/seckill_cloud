@@ -1,7 +1,5 @@
 package com.tutu.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,8 +48,8 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()// 构建
-                .withClient("oauth-client")
-                .secret(passwordEncoder.encode("secret")) // 秘钥，必须加密
+                .withClient("client-app")
+                .secret(passwordEncoder.encode("123456")) // 秘钥，必须加密
                 .authorizedGrantTypes("password","refresh_token") // 支持的授权类型
                 .scopes("all") // 授权范围
                 .accessTokenValiditySeconds(7 * 24 * 3600) // token的有效期
@@ -70,19 +68,26 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
                 .userDetailsService(userDetailsService)
                 .tokenStore(jwtTokenStore())// tokenStore 来存储我们的token jwt 存储token
                 .tokenEnhancer(jwtAccessTokenConverter());
-        super.configure(endpoints);
     }
 
+    /**
+     *
+     * @return OAuth2 令牌的持久性接口。
+     */
     private TokenStore jwtTokenStore() {
         JwtTokenStore jwtTokenStore = new JwtTokenStore(jwtAccessTokenConverter());
         return jwtTokenStore;
     }
 
+    /**
+     * 自定义JWT解码器，资源服务器存放公钥
+     * @return
+     */
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
         // 加载自己的私钥
-        ClassPathResource classPathResource = new ClassPathResource("jwt.jks.old");
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(classPathResource, "seckill".toCharArray());
+        // keytool -genkey -alias jwt -keyalg RSA -keystore jwt.jks
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "seckill".toCharArray());
         tokenConverter.setKeyPair(keyStoreKeyFactory.getKeyPair("jwt", "seckill".toCharArray()));
         return tokenConverter;
     }

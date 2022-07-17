@@ -17,6 +17,10 @@ public class Test {
     @Autowired
     private KeyPair keyPair;
 
+    /**
+     * 取RSA公钥接口
+     * @return
+     */
     @GetMapping("/rsa/publicKey")
     public Map<String, Object> getKey() {
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();

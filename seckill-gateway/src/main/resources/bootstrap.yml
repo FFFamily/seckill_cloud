@@ -11,20 +11,37 @@ spring:
       discovery:
         locator:
           enabled: true # 启用自动根据服务ID生成路由 开启注册中心自动路由功能
-#          lower-case-service-id: true # 设置路由的路径为小写的服务ID
-#      enabled: true
+      #          lower-case-service-id: true # 设置路由的路径为小写的服务ID
+      #      enabled: true
       routes:
-        - id: news-router						# 路由id
-#          uri: lb://seckill	# 真实调用地址
+        - id: news-router
           uri: http://localhost:8082/
           predicates:
             - Path=/seckill/**
+          filters:
+            - StripPrefix=1
         - id: order-router
           uri: http://localhost:8081/
           predicates:
             - Path=/order/**
+          filters:
+            - StripPrefix=1
         - id: user-router
           uri: http://localhost:8083/
           predicates:
             - Path=/user/**
+          filters:
+            - StripPrefix=1
+        - id: auth-router
+          uri: http://localhost:8084/
+          predicates:
+            - Path=/oauth/**
+          filters:
+            - StripPrefix=1
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # 配置RSA的公钥访问地址
+          jwk-set-uri: 'http://localhost:8084/oauth/rsa/publicKey'
 

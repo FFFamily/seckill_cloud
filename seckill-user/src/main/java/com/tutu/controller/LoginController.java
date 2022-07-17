@@ -31,7 +31,6 @@ public class LoginController {
     private RedisUtil redisUtil;
 
     @PostMapping("/test")
-
     public BaseResponse test() {
         return BaseResponse.SUCCESS;
     }
