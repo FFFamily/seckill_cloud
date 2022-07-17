@@ -1,21 +1,15 @@
 package com.tutu.filtter;
 
-import com.alibaba.fastjson.JSONObject;
-import com.google.common.net.HttpHeaders;
+import cn.hutool.core.util.StrUtil;
 import com.nimbusds.jose.JWSObject;
-import com.tutu.common.constants.Constants;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
-import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -82,7 +76,7 @@ public class MyGlobalFilter implements GlobalFilter, Ordered {
      */
     private boolean hasToken(ServerWebExchange exchange) {
         String token = exchange.getRequest().getHeaders().getFirst(TOKEN_NAME);
-        return StringUtils.isBlank(token) ? false : true;
+        return !StrUtil.isBlank(token);
     }
 
     /**
@@ -102,14 +96,17 @@ public class MyGlobalFilter implements GlobalFilter, Ordered {
      * @return
      */
     private Mono<Void> buildeNoAuthorizationResult(ServerWebExchange exchange) {
-        ServerHttpResponse response = exchange.getResponse();
-        response.getHeaders().set("Content-Type", "application/json");
-        response.setStatusCode(HttpStatus.UNAUTHORIZED);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", Constants.ERROR);
-        jsonObject.put("message", "NO Authorization,Token is Null or Error");
-        DataBuffer wrap = response.bufferFactory().wrap(jsonObject.toJSONString().getBytes());
-        return response.writeWith(Flux.just(wrap));
+        /**
+         *         ServerHttpResponse response = exchange.getResponse();
+         *         response.getHeaders().set("Content-Type", "application/json");
+         *         response.setStatusCode(HttpStatus.UNAUTHORIZED);
+         *         JSONObject jsonObject = new JSONObject();
+         *         jsonObject.put("code", Constants.ERROR);
+         *         jsonObject.put("message", "NO Authorization,Token is Null or Error");
+         *         DataBuffer wrap = response.bufferFactory().wrap(jsonObject.toJSONString().getBytes());
+         *         return response.writeWith(Flux.just(wrap));
+         */
+        return null;
     }
 
 }
