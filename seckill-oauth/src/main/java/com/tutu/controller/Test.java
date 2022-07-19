@@ -14,6 +14,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/oauth")
 public class Test {
+
     @Autowired
     private KeyPair keyPair;
 

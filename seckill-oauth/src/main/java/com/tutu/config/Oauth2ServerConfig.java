@@ -1,94 +1,80 @@
 package com.tutu.config;
 
+import com.tutu.component.JwtTokenEnhancer;
+import com.tutu.service.UserServiceImpl;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 
-import javax.annotation.Resource;
+import java.security.KeyPair;
+import java.util.ArrayList;
+import java.util.List;
 
-@EnableAuthorizationServer // 开启授权服务器的功能
+
+@AllArgsConstructor
 @Configuration
+@EnableAuthorizationServer
 public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
-    @Resource
-    private PasswordEncoder passwordEncoder;
 
-    @Resource
-    private AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private final UserServiceImpl userDetailsService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenEnhancer jwtTokenEnhancer;
 
-    @Resource
-    private UserDetailsService userDetailsService;
-
-
-    /**
-     * 用来配置令牌端点(Token Endpoint)的安全约束.
-     * @param security a fluent configurer for security features
-     * @throws Exception
-     */
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-
-    }
-
-    /**
-     * 用来配置客户端详情服务（ClientDetailsService），客户端详情信息在这里进行初始化，你能够把客户端详情信息写死在这里或者是通过数据库来存储调取详情信息
-     * @param clients the client details configurer
-     * @throws Exception
-     */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()// 构建
+        clients.inMemory()
                 .withClient("client-app")
-                .secret(passwordEncoder.encode("123456")) // 秘钥，必须加密
-                .authorizedGrantTypes("password","refresh_token") // 支持的授权类型
-                .scopes("all") // 授权范围
-                .accessTokenValiditySeconds(7 * 24 * 3600) // token的有效期
-                .refreshTokenValiditySeconds(30 * 24 * 3600)// refresh_token的有效期
-                .autoApprove(true); // 登录后绕过批准询问(/oauth/confirm_access)
+                .secret(passwordEncoder.encode("123456"))
+                .scopes("all")
+                .authorizedGrantTypes("password", "refresh_token")
+                .accessTokenValiditySeconds(3600)
+                .refreshTokenValiditySeconds(86400);
     }
 
-    /**
-     * 用来配置授权（authorization）以及令牌（token）的访问端点和令牌服务(token services)
-     * @param endpoints the endpoints configurer
-     * @throws Exception
-     */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
+        List<TokenEnhancer> delegates = new ArrayList<>();
+        delegates.add(jwtTokenEnhancer);
+        delegates.add(accessTokenConverter());
+        enhancerChain.setTokenEnhancers(delegates); //配置JWT的内容增强器
         endpoints.authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService)
-                .tokenStore(jwtTokenStore())// tokenStore 来存储我们的token jwt 存储token
-                .tokenEnhancer(jwtAccessTokenConverter());
+                .userDetailsService(userDetailsService) //配置加载用户信息的服务
+                .accessTokenConverter(accessTokenConverter())
+                .tokenEnhancer(enhancerChain);
     }
 
-    /**
-     *
-     * @return OAuth2 令牌的持久性接口。
-     */
-    private TokenStore jwtTokenStore() {
-        JwtTokenStore jwtTokenStore = new JwtTokenStore(jwtAccessTokenConverter());
-        return jwtTokenStore;
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.allowFormAuthenticationForClients();
     }
 
-    /**
-     * 自定义JWT解码器，资源服务器存放公钥
-     * @return
-     */
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
-        // 加载自己的私钥
-        // keytool -genkey -alias jwt -keyalg RSA -keystore jwt.jks
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "seckill".toCharArray());
-        tokenConverter.setKeyPair(keyStoreKeyFactory.getKeyPair("jwt", "seckill".toCharArray()));
-        return tokenConverter;
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        jwtAccessTokenConverter.setKeyPair(keyPair());
+        return jwtAccessTokenConverter;
     }
+
+    @Bean
+    public KeyPair keyPair() {
+        //从classpath下的证书中获取秘钥对
+        org.springframework.security.rsa.crypto.KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "seckill".toCharArray());
+        return keyStoreKeyFactory.getKeyPair("jwt", "seckill".toCharArray());
+    }
+
 }

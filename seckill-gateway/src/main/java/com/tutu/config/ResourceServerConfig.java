@@ -28,11 +28,16 @@ import reactor.core.publisher.Mono;
 @Configuration
 @EnableWebFluxSecurity
 public class ResourceServerConfig {
+    // 错误返回结果
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    // 正确返回结果
     private final RestfulAccessDeniedHandler restfulAccessDeniedHandler;
+    // 白名单过滤拦截器
     private final IgnoreUrlsRemoveJwtFilter ignoreUrlsRemoveJwtFilter;
+    // 白名单
     private final IgnoreUrlsConfig ignoreUrlsConfig;
 
+    @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http.oauth2ResourceServer()
                 .jwt() //启用JWT资源服务器支持
@@ -40,7 +45,7 @@ public class ResourceServerConfig {
         //自定义处理JWT请求头过期或签名错误的结果
         http.oauth2ResourceServer().authenticationEntryPoint(restAuthenticationEntryPoint);
         // //对白名单路径，直接移除JWT请求头
-        http.addFilterBefore(ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHORIZATION);
+//        http.addFilterBefore(ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHORIZATION);
         http.authorizeExchange()
                 .pathMatchers(ArrayUtil.toArray(ignoreUrlsConfig.getUrls(), String.class)).permitAll() // 白名单
                 .and()

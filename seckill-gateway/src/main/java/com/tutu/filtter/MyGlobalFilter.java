@@ -33,7 +33,7 @@ public class MyGlobalFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
-        log.info("拦截用户请求：{}", path);
+        log.info("MyGlobalFilter： 拦截用户请求：{}", path);
         // 1，判断是否携带token
         // 没有放行，进入 IgnoreUrlsRemoveJwtFilter 过滤
         if (!hasToken(exchange)) {
@@ -64,7 +64,7 @@ public class MyGlobalFilter implements GlobalFilter, Ordered {
      */
     @Override
     public int getOrder() {
-        return 0;
+        return -1;
     }
 
 
