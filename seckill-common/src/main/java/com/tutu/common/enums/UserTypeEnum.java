@@ -4,9 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum UserTypeEnum {
-    USER(0,"普通用户"),
-    ADMIN(1,"管理人员")
-    ;
+    USER(0, "普通用户"),
+    ADMIN(1, "管理人员");
     private Integer code;
     private String desc;
 

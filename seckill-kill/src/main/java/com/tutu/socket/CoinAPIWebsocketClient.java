@@ -25,11 +25,11 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 @Component
 public class CoinAPIWebsocketClient extends WebSocketClient {
-    private static HashMap<String, String> symbolMap;
     // 空闲线程会呆多60秒，感觉没啥用，所以还是得自定义实现，1秒就销掉它。
     public static ExecutorService pool = new ThreadPoolExecutor(20, Integer.MAX_VALUE,
             1L, TimeUnit.SECONDS,
             new SynchronousQueue<Runnable>());
+    private static HashMap<String, String> symbolMap;
     // 非公平锁
     private static ReentrantLock lock = new ReentrantLock();
     private static ThreadLocal<DateFormat> timeThreadLocal = new ThreadLocal<DateFormat>() {
@@ -38,9 +38,8 @@ public class CoinAPIWebsocketClient extends WebSocketClient {
             return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'");
         }
     };
-    @Autowired
-    private TradeKLineEvent tradeKLineEvent;
     private static URI serverUri;
+
     static {
         try {
             serverUri = new URI("wss://ws.coinapi.io/v1/");
@@ -55,6 +54,10 @@ public class CoinAPIWebsocketClient extends WebSocketClient {
             e.printStackTrace();
         }
     }
+
+    @Autowired
+    private TradeKLineEvent tradeKLineEvent;
+
     public CoinAPIWebsocketClient() {
         super(serverUri);
     }
@@ -150,7 +153,7 @@ public class CoinAPIWebsocketClient extends WebSocketClient {
             String jsonStr = JSONObject.toJSONString(params);
             log.info("发送的消息为：{}", jsonStr);
             this.send(jsonStr);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.info("发送初始消息出现异常，异常信息为：{}", e.getMessage());
             return false;
         }

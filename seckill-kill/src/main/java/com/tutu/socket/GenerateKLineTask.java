@@ -2,15 +2,14 @@ package com.tutu.socket;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.math.BigDecimal;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 @Slf4j
 public class GenerateKLineTask implements Runnable {
     CreateKLineDto klineData;
-    public GenerateKLineTask(CreateKLineDto _klineData){
+
+    public GenerateKLineTask(CreateKLineDto _klineData) {
         klineData = _klineData;
     }
+
     @Override
     public void run() {
         log.info("异步任务 GenerateKLineTask--开始");

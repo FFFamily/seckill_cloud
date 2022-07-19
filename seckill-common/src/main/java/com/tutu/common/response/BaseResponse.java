@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * 基础返回类
+ *
  * @Author
  * @Date 2021/12/28 17:19
  */

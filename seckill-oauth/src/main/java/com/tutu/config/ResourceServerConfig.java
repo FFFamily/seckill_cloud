@@ -22,6 +22,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     /**
      * 暂时不需要配置这个
+     *
      * @param resources configurer for the resource server
      * @throws Exception
      */
@@ -31,7 +32,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     }
 
     /**
-     *
      * @param http the current http filter configuration
      * @throws Exception
      */
@@ -39,7 +39,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.antMatcher("/**") // 匹配需要资源认证的路径（这里是对所有的请求都拦截）
                 .authorizeRequests() // 允许基于 HttpServletRequest 使用限制访问
-                .antMatchers("/login","/oauth/rsa/publicKey")
+                .antMatchers("/login", "/oauth/rsa/publicKey")
                 .permitAll(); // //匹配不需要资源认证路径,指定任何人都允许 URL。
     }
 }

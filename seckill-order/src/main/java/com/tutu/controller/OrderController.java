@@ -3,9 +3,10 @@ package com.tutu.controller;
 import com.tutu.common.response.BaseResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 订单管理
@@ -24,7 +25,7 @@ public class OrderController {
     private boolean useLocalCache;
 
     @GetMapping("/get")
-    public BaseResponse get(){
+    public BaseResponse get() {
         System.out.println("test");
         return BaseResponse.success(useLocalCache);
     }
