@@ -31,6 +31,7 @@
         <druid.version>1.1.10</druid.version>
         <alibaba-nacos-discovery-version>2021.0.1.0</alibaba-nacos-discovery-version>
         <mybatis-plus-version>3.2.0</mybatis-plus-version>
+        <openfeign-version>3.1.3</openfeign-version>
     </properties>
 
     <!--  因为是总项目 所以用dependencyManagement来管理  因为其他的子项目就不会来管理版本了了 可以直接引用 -->
@@ -90,6 +91,24 @@
                 <artifactId>swagger-models</artifactId>
                 <version>1.5.21</version>
             </dependency>
+            <!--服务调用-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${openfeign-version}</version>
+            </dependency>
+            <!-- ribbon负载均衡-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+                <version>2.2.10.RELEASE</version>
+            </dependency>
+            <!--熔断器hystrix依赖，主要是用 @HystrixCommand -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+                <version>2.2.10.RELEASE</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -99,6 +118,9 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -119,6 +141,11 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool-version}</version>
+        </dependency>
+        <!--javax validation 判断-->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
         </dependency>
     </dependencies>
 

@@ -28,7 +28,7 @@ spring:
         - id: user-router
           uri: http://localhost:8083/
           predicates:
-            - Path=/user/**
+            - Path=/seuser/**
           filters:
             - StripPrefix=1
         - id: auth-router
@@ -54,3 +54,4 @@ secure:
     urls:
       - "/user/login"
       - "/oauth/rsa/publicKey"
+      - "/seuser/user/register"

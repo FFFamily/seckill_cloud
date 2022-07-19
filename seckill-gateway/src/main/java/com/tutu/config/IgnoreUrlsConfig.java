@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * 网关白名单配置
+ * 部分请求不需要 Token 就能访问
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

@@ -81,8 +81,6 @@ public class SeUserService {
         }
         SeUser user = new SeUser();
         BeanUtils.copyProperties(vo, user);
-        // 设置主键
-//        user.setId(IdWorkerUtil.nextId());
         user.setIsAdmin(UserTypeEnum.USER.getCode());
         user.setYear((int) (15 + Math.random() * (80 - 15) + 1));
         if (user.getYear() < 18) {
