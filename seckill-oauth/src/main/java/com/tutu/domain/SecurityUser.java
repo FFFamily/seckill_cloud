@@ -36,19 +36,16 @@ public class SecurityUser implements UserDetails {
      */
     private Collection<SimpleGrantedAuthority> authorities;
 
-    public SecurityUser() {
-
-    }
 
     public SecurityUser(UserDTO userDTO) {
         this.setId(userDTO.getId());
-        this.setUsername(userDTO.getUsername());
-        this.setPassword(userDTO.getPassword());
-        this.setEnabled(userDTO.getStatus() == 1);
-        if (userDTO.getRoles() != null) {
-            authorities = new ArrayList<>();
-            userDTO.getRoles().forEach(item -> authorities.add(new SimpleGrantedAuthority(item)));
-        }
+        this.setUsername(userDTO.getUserName());
+        this.setPassword(userDTO.getPassWord());
+//        this.setEnabled(userDTO.getStatus() == 1);
+//        if (userDTO.getRoles() != null) {
+//            authorities = new ArrayList<>();
+//            userDTO.getRoles().forEach(item -> authorities.add(new SimpleGrantedAuthority(item)));
+//        }
     }
 
     @Override
@@ -83,7 +80,8 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.enabled;
+        // TODO 应该是获取 enable 的 值
+        return true;
     }
 
 }

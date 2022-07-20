@@ -28,8 +28,15 @@ public class UserController {
         return BaseResponse.success(ptUser);
     }
 
-    @GetMapping("/getInfoByPhone")
-    public BaseResponse getInfoByPhone(@RequestParam String phone) {
+    @GetMapping("/getUserByPhone/{phone}")
+    public BaseResponse getInfoByPhone(@PathVariable String phone) {
         return BaseResponse.success(userService.findUserByPhone(phone));
     }
+
+    @GetMapping("/getUserByName/{userName}")
+    public BaseResponse getUserByUserName(@PathVariable String userName){
+        return BaseResponse.success(userService.findUserByName(userName));
+    }
+
+
 }

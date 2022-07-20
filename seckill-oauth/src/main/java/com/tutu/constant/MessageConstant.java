@@ -4,6 +4,9 @@ package com.tutu.constant;
  * 消息常量
  */
 public interface MessageConstant {
+
+    public static String NO_SUCH_USER = "用户不存在";
+
     public static String LOGIN_SUCCESS = "登录成功!";
 
     public static String USERNAME_PASSWORD_ERROR = "用户名或密码错误!";

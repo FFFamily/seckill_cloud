@@ -27,6 +27,7 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
         </dependency>
+        <!--最新版本的Spring Cloud已经放弃使用Ribbon来做负载均衡了，转而使用LoadBalancer，所以网关服务中还需添加LoadBalancer依赖-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>

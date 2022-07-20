@@ -35,8 +35,8 @@ spring:
           uri: http://localhost:8084/
           predicates:
             - Path=/oauth/**
-  #          filters:
-  #            - StripPrefix=1
+          filters:
+            - StripPrefix=1
   security:
     oauth2:
       resourceserver:
@@ -54,4 +54,8 @@ secure:
     urls:
       - "/user/login"
       - "/oauth/rsa/publicKey"
+      - "/oauth/oauth/token"
+      - "/oauth/token"
       - "/seuser/user/register"
+      - "/seuser/user/login"
+      - "/user/getUserByName"

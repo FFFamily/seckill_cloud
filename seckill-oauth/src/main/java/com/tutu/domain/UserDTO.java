@@ -11,12 +11,22 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@AllArgsConstructor
 public class UserDTO {
+    /**
+     * 编号
+     */
     private Long id;
-    private String username;
-    private String password;
+    /**
+     * 用户名
+     */
+    private String userName;
+    /**
+     * 密码
+     */
+    private String passWord;
+    /**
+     * 状态
+     */
     private Integer status;
     private List<String> roles;
-
 }

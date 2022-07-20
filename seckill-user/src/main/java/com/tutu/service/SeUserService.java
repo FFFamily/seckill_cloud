@@ -5,11 +5,19 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.tutu.common.enums.UserTypeEnum;
 import com.tutu.common.exception.BusinessException;
 import com.tutu.common.exception.LoginException;
+import com.tutu.entity.JwtToken;
 import com.tutu.entity.SeUser;
+import com.tutu.feign.UserFeign;
 import com.tutu.mapper.SeUserMapper;
 import com.tutu.vo.LoginVo;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,6 +35,15 @@ public class SeUserService {
 
     @Resource
     private SeUserMapper seUserMapper;
+
+    @Autowired
+    private UserFeign userFeign;
+
+    @Value("${basic.token:Basic Y29pbi1hcGk6Y29pbi1zZWNyZXQ=}")
+    private String basicToken;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 根据手机号查询用户
@@ -47,6 +64,7 @@ public class SeUserService {
      */
     public SeUser login(LoginVo vo) {
         log.info("登录--开始，参数为：{}", vo);
+        ResponseEntity<JwtToken> tokenResponseEntity = userFeign.getToken("password", vo.getUserName(), vo.getPassWord(), "member_type", basicToken);
         SeUser seUser = seUserMapper.selectOne(
                 new LambdaQueryWrapper<SeUser>().eq(SeUser::getPhone, vo.getPhone())
         );
@@ -102,6 +120,8 @@ public class SeUserService {
             }
         }
         user.setMoney(new BigDecimal("100"));
+        // 加密密码
+        user.setPassWord(passwordEncoder.encode(user.getPassWord()));
         seUserMapper.insert(user);
         return user.getId();
     }
@@ -122,5 +142,14 @@ public class SeUserService {
      */
     public SeUser findUserById(String id) {
         return seUserMapper.selectOne(new LambdaQueryWrapper<SeUser>().eq(SeUser::getId, id));
+    }
+
+    /**
+     * 获取用户通过用户名
+     * @param userName
+     * @return
+     */
+    public SeUser findUserByName(String userName) {
+        return seUserMapper.selectOne(new LambdaQueryWrapper<SeUser>().eq(SeUser::getUserName, userName));
     }
 }
