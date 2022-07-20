@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -23,7 +24,9 @@ import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * 认证服务器 搭建
+ */
 @AllArgsConstructor
 @Configuration
 @EnableAuthorizationServer
@@ -87,4 +90,8 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
         return keyStoreKeyFactory.getKeyPair("jwt", "seckill".toCharArray());
     }
 
+    public static void main(String[] args) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        System.out.println(encoder.encode("12345678"));
+    }
 }

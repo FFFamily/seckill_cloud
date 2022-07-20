@@ -22,7 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-                .antMatchers("/oauth/rsa/publicKey","/seuser/user/login","/user/login","/user/getUserByPhone").permitAll() // 放行Api
+                .antMatchers("/oauth/rsa/publicKey").permitAll() // 放行Api
                 .anyRequest().authenticated();
     }
 

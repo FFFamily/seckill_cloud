@@ -29,6 +29,7 @@ public class UserController {
 
     @GetMapping("/getInfo")
     public BaseResponse findUserInfo() {
+        System.out.println("1111");
         PtUser ptUser = PtUserContextHolder.get();
 //        userInfoUtil.getUserInfo();
         return BaseResponse.success(ptUser);

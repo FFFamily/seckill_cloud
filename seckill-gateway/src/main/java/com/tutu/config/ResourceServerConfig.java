@@ -2,6 +2,7 @@ package com.tutu.config;
 
 
 import cn.hutool.core.util.ArrayUtil;
+import com.tutu.authorization.AuthorizationManager;
 import com.tutu.component.RestAuthenticationEntryPoint;
 import com.tutu.component.RestfulAccessDeniedHandler;
 import com.tutu.constant.AuthConstant;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -27,6 +29,7 @@ import reactor.core.publisher.Mono;
 @Configuration
 @EnableWebFluxSecurity
 public class ResourceServerConfig {
+    private final AuthorizationManager authorizationManager;
     // 错误返回结果
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     // 正确返回结果
@@ -37,35 +40,29 @@ public class ResourceServerConfig {
     private final IgnoreUrlsConfig ignoreUrlsConfig;
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        http.oauth2ResourceServer()
-                .jwt() //启用JWT资源服务器支持
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        http.oauth2ResourceServer().jwt()
                 .jwtAuthenticationConverter(jwtAuthenticationConverter());
-        // 自定义处理JWT请求头过期或签名错误的结果
+        //自定义处理JWT请求头过期或签名错误的结果
         http.oauth2ResourceServer().authenticationEntryPoint(restAuthenticationEntryPoint);
-        // //对白名单路径，直接移除JWT请求头
-//        http.addFilterBefore(ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHORIZATION);
+        //对白名单路径，直接移除JWT请求头
+        http.addFilterBefore(ignoreUrlsRemoveJwtFilter, SecurityWebFiltersOrder.AUTHENTICATION);
         http.authorizeExchange()
-                .pathMatchers(ArrayUtil.toArray(ignoreUrlsConfig.getUrls(), String.class)).permitAll() // 白名单
-                .and()
-                .exceptionHandling() // 异常处理
-                .accessDeniedHandler(restfulAccessDeniedHandler) // 处理未授权
-                .and()
-                .csrf()
-                .disable();
+                .pathMatchers(ArrayUtil.toArray(ignoreUrlsConfig.getUrls(),String.class)).permitAll()//白名单配置
+                .anyExchange().access(authorizationManager)//鉴权管理器配置
+                .and().exceptionHandling()
+                .accessDeniedHandler(restfulAccessDeniedHandler)//处理未授权
+                .authenticationEntryPoint(restAuthenticationEntryPoint)//处理未认证
+                .and().csrf().disable();
         return http.build();
     }
 
     @Bean
     public Converter<Jwt, ? extends Mono<? extends AbstractAuthenticationToken>> jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        // 设置身份验证前缀
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix(AuthConstant.AUTHORITY_PREFIX);
-        // 设置授权声明名称
         jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName(AuthConstant.AUTHORITY_CLAIM_NAME);
-        // Jwt身份验证转换器
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        // 设置Jwt授予的权限转换器
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
     }

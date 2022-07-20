@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 /**
  * 全局过滤器
+ * 实现一个全局过滤器AuthGlobalFilter，当鉴权通过后将JWT令牌中的用户信息解析出来，然后存入请求的Header中，这样后续服务就不需要解析JWT令牌了，可以直接从请求的Header中获取到用户信息
  */
 @Slf4j
 @Component
