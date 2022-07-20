@@ -17,22 +17,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    /**
-     * 本地测试
-     *
-     * @param args
-     */
-    public static void main(String[] args) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        String encode = bCryptPasswordEncoder.encode("123456");
-        System.out.println(encode);// $2a$10$JbaK400bmPh3gvWQGE6d9.q0wX6uHDM8LuoOElvVTaPmgcGDm5UYu
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-                .antMatchers("/oauth/rsa/publicKey").permitAll() // 放行Api
+                .antMatchers("/oauth/rsa/publicKey","/seuser/user/login","/user/login","/user/getUserByPhone").permitAll() // 放行Api
                 .anyRequest().authenticated();
     }
 

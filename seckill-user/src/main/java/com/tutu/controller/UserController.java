@@ -3,8 +3,10 @@ package com.tutu.controller;
 import com.tutu.common.entity.PtUser;
 import com.tutu.common.halder.PtUserContextHolder;
 import com.tutu.common.response.BaseResponse;
+import com.tutu.common.utils.UserInfoUtil;
 import com.tutu.service.SeUserService;
 import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -22,9 +24,13 @@ public class UserController {
     @Resource
     private SeUserService userService;
 
+    @Autowired
+    private UserInfoUtil userInfoUtil;
+
     @GetMapping("/getInfo")
     public BaseResponse findUserInfo() {
         PtUser ptUser = PtUserContextHolder.get();
+//        userInfoUtil.getUserInfo();
         return BaseResponse.success(ptUser);
     }
 

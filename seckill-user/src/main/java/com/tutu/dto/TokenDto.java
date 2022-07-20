@@ -1,4 +1,4 @@
-package com.tutu.domain;
+package com.tutu.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,13 +7,10 @@ import lombok.EqualsAndHashCode;
 import java.io.Serializable;
 
 /**
- * Oauth2获取Token返回信息封装
- * Created by macro on 2020/7/17.
+ * 令牌传输类
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Builder
-public class Oauth2TokenDto implements Serializable {
+public class TokenDto implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * 访问令牌

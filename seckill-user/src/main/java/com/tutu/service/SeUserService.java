@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.tutu.common.enums.UserTypeEnum;
 import com.tutu.common.exception.BusinessException;
 import com.tutu.common.exception.LoginException;
+import com.tutu.common.response.BaseResponse;
+import com.tutu.dto.TokenDto;
 import com.tutu.entity.JwtToken;
 import com.tutu.entity.SeUser;
 import com.tutu.feign.UserFeign;
@@ -62,24 +64,12 @@ public class SeUserService {
      * @param vo
      * @return
      */
-    public SeUser login(LoginVo vo) {
+    public String login(LoginVo vo) {
         log.info("登录--开始，参数为：{}", vo);
-        ResponseEntity<JwtToken> tokenResponseEntity = userFeign.getToken("password", vo.getUserName(), vo.getPassWord(), "member_type", basicToken);
-        SeUser seUser = seUserMapper.selectOne(
-                new LambdaQueryWrapper<SeUser>().eq(SeUser::getPhone, vo.getPhone())
-        );
-        if (Objects.isNull(seUser)) {
-            throw new LoginException("用户未找到");
-        }
-        if (!vo.getPassWord().equals(seUser.getPassWord())) {
-            throw new LoginException("密码或用户名错误");
-        }
-        seUser.setPassWord(null);
-        seUser.setPromiseState(null);
-        seUser.setLoanTime(null);
-        seUser.setWorkState(null);
-        log.info("登录--结束");
-        return seUser;
+        BaseResponse<TokenDto> res = userFeign.getToken("password", vo.getPhone(), vo.getPassWord(), "123456", "client-app");
+        TokenDto data = res.getData();
+        String token = data.getTokenHead() + data.getToken();
+        return token;
     }
 
     /**

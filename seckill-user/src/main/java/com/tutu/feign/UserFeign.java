@@ -1,5 +1,7 @@
 package com.tutu.feign;
 
+import com.tutu.common.response.BaseResponse;
+import com.tutu.dto.TokenDto;
 import com.tutu.entity.JwtToken;
 import com.tutu.handler.VodClientDefeat;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -17,21 +19,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UserFeign {
     /**
      * 拿到token
-     *
      * @param grantType
      * @param username
      * @param password
-     * @param loginType
-     * @param basicToken
+     * @param clientSecret
+     * @param clientId
      * @return
      */
     @PostMapping("/oauth/token")
-    ResponseEntity<JwtToken> getToken(
+    BaseResponse<TokenDto> getToken(
             @RequestParam("grant_type") String grantType, // 授权类型
             @RequestParam("username") String username, // 用户名
             @RequestParam("password") String password, // 用户的密码
-            @RequestParam("login_type") String loginType,  // 登录的类型
-            @RequestHeader("Authorization") String basicToken // Basic Y29pbi1hcGk6Y29pbi1zZWNyZXQ= 由第三方客户端信息加密出现的值
+            @RequestParam("client_secret") String clientSecret,
+            @RequestParam("client_id") String clientId
     );
 
 }

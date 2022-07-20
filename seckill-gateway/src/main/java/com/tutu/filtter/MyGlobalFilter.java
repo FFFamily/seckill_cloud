@@ -25,7 +25,8 @@ public class MyGlobalFilter implements GlobalFilter, Ordered {
 
     /**
      * 过滤规则
-     *
+     * 已经在 ResourceServerConfig 配置中配置了 放行的白名单
+     * 不需要在这里处理 白名单放行的问题
      * @param exchange
      * @param chain
      * @return
@@ -76,7 +77,7 @@ public class MyGlobalFilter implements GlobalFilter, Ordered {
      */
     private boolean hasToken(ServerWebExchange exchange) {
         String token = exchange.getRequest().getHeaders().getFirst(TOKEN_NAME);
-        return !StrUtil.isBlank(token);
+        return StrUtil.isNotBlank(token);
     }
 
     /**
