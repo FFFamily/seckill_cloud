@@ -9,6 +9,7 @@
 - 携带 token 访问，一直提示Not Authenticated ，原因是 从 WebFilterChain 中 遍历找 Authorization 类 为空
 - 版本 1.1.2 修复了携带token 也无法访问的问题 ，添加了AuthorizationManager鉴权管理器
 - 版本 1.1.2 遗留 BUG，获取用户信息乱码问题
+- 版本 1.1.3 解决用户信息乱码问题，在Gateway拦截解析token重新构建请求头时出现了乱码
 
 
 集成 Nocos 做 注册中心 以及 配置中心

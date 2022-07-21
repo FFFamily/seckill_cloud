@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * 全局过滤器
  * 实现一个全局过滤器AuthGlobalFilter，当鉴权通过后将JWT令牌中的用户信息解析出来，然后存入请求的Header中，这样后续服务就不需要解析JWT令牌了，可以直接从请求的Header中获取到用户信息
@@ -48,9 +50,10 @@ public class MyGlobalFilter implements GlobalFilter, Ordered {
             String realToken = token.replace("Bearer ", "");
             JWSObject jwsObject = JWSObject.parse(realToken);
             String userStr = jwsObject.getPayload().toString();
-            log.info("MyGlobalFilter.filter() user:{}", userStr);
-            ServerHttpRequest request = exchange.getRequest().mutate().header("user", userStr).build();
-            exchange = exchange.mutate().request(request).build();
+            String userInfo = new String(userStr.getBytes(StandardCharsets.UTF_8),"UTF-8");
+            log.info("MyGlobalFilter.filter() user:{}", userInfo);
+//            ServerHttpRequest request = exchange.getRequest().mutate().header("user", userInfo).build();
+//            exchange = exchange.mutate().request(request).build();
         } catch (Exception e) {
             log.info("解析拼装Token出现问题");
             e.printStackTrace();
