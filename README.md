@@ -5,9 +5,10 @@
 - gateway 的逻辑是 先判断是否携带 token
 - 完成登录注册，密码加密，登录返回token 
 - 携带token访问接口，全局识别token，存放用户信息，以供其他模块访问用户信息
-- 版本 1.0.1 修复了 模块调用401的异常，原因是模块意外导入了security依赖，但没有配置security
+- 版本 1.1.1 修复了 模块调用401的异常，原因是模块意外导入了security依赖，但没有配置security
 - 携带 token 访问，一直提示Not Authenticated ，原因是 从 WebFilterChain 中 遍历找 Authorization 类 为空
-- 版本 1.0.2 修复了携带token 也无法访问的问题 ，添加了AuthorizationManager鉴权管理器
+- 版本 1.1.2 修复了携带token 也无法访问的问题 ，添加了AuthorizationManager鉴权管理器
+- 版本 1.1.2 遗留 BUG，获取用户信息乱码问题
 
 
 集成 Nocos 做 注册中心 以及 配置中心
