@@ -3,11 +3,12 @@ package com.tutu.filtter;
 import cn.hutool.core.util.StrUtil;
 import com.nimbusds.jose.JWSObject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -25,6 +26,9 @@ public class MyGlobalFilter implements GlobalFilter, Ordered {
      * Token名称
      */
     private final static String TOKEN_NAME = HttpHeaders.AUTHORIZATION;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 过滤规则
@@ -48,15 +52,13 @@ public class MyGlobalFilter implements GlobalFilter, Ordered {
             String token = getToken(exchange);
             //从token中解析用户信息并设置到Header中去
             String realToken = token.replace("Bearer ", "");
+            // 解析
             JWSObject jwsObject = JWSObject.parse(realToken);
             String userStr = jwsObject.getPayload().toString();
             String userInfo = new String(userStr.getBytes(StandardCharsets.UTF_8),"UTF-8");
-            log.info("MyGlobalFilter.filter() user:{}", userInfo);
-//            ServerHttpRequest request = exchange.getRequest().mutate().header("user", userInfo).build();
-//            exchange = exchange.mutate().request(request).build();
+            log.info("MyGlobalFilter.filter() 用户访问 : {}", userInfo);
         } catch (Exception e) {
-            log.info("解析拼装Token出现问题");
-            e.printStackTrace();
+            log.info("解析拼装Token出现问题,Token非法");
         }
         return chain.filter(exchange);
     }

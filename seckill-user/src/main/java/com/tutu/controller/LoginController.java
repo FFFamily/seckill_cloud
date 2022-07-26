@@ -1,10 +1,7 @@
 package com.tutu.controller;
 
 
-import com.tutu.common.entity.RedisKeys;
-import com.tutu.common.halder.PtUserContextHolder;
 import com.tutu.common.response.BaseResponse;
-import com.tutu.common.utils.RedisUtil;
 import com.tutu.service.SeUserService;
 import com.tutu.vo.LoginVo;
 import io.swagger.annotations.ApiOperation;
@@ -27,8 +24,8 @@ public class LoginController {
     @Resource
     private SeUserService userService;
 
-    @Resource
-    private RedisUtil redisUtil;
+//    @Resource
+//    private RedisUtil redisUtil;
 
     @PostMapping("/test")
     public BaseResponse test() {
@@ -47,13 +44,13 @@ public class LoginController {
         return BaseResponse.success(userService.register(vo));
     }
 
-    @GetMapping("/out")
-    @ApiOperation("登出")
-    public BaseResponse logOut() {
-        boolean flag;
-        flag = redisUtil.remove(RedisKeys.getPtUserKey(PtUserContextHolder.get().getId()))
-                && redisUtil.remove(RedisKeys.getIpLimitInfo(PtUserContextHolder.get().getIp()));
-        return flag ? BaseResponse.SUCCESS : BaseResponse.ERROR;
-    }
+//    @GetMapping("/out")
+//    @ApiOperation("登出")
+//    public BaseResponse logOut() {
+//        boolean flag;
+//        flag = redisUtil.remove(RedisKeys.getPtUserKey(PtUserContextHolder.get().getId()))
+//                && redisUtil.remove(RedisKeys.getIpLimitInfo(PtUserContextHolder.get().getIp()));
+//        return flag ? BaseResponse.SUCCESS : BaseResponse.ERROR;
+//    }
 
 }

@@ -1,10 +1,7 @@
 package com.tutu.controller;
 
-import com.tutu.common.entity.PtUser;
-import com.tutu.common.halder.PtUserContextHolder;
 import com.tutu.common.response.BaseResponse;
-import com.tutu.common.utils.UserInfoUtil;
-import com.tutu.handler.UserHandler;
+import com.tutu.entity.handler.UserHandler;
 import com.tutu.service.SeUserService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;

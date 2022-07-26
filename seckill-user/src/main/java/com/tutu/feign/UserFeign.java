@@ -2,13 +2,9 @@ package com.tutu.feign;
 
 import com.tutu.common.response.BaseResponse;
 import com.tutu.dto.TokenDto;
-import com.tutu.entity.JwtToken;
-import com.tutu.handler.VodClientDefeat;
+import com.tutu.entity.handler.VodClientDefeat;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**

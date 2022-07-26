@@ -1,4 +1,4 @@
-package com.tutu.handler;
+package com.tutu.entity.handler;
 
 import com.tutu.common.response.BaseResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;

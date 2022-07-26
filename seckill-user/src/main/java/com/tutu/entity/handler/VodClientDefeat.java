@@ -1,4 +1,4 @@
-package com.tutu.handler;
+package com.tutu.entity.handler;
 
 public class VodClientDefeat {
 }

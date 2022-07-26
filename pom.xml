@@ -13,6 +13,8 @@
         <module>seckill-user</module>
         <module>seckill-gateway</module>
         <module>seckill-oauth</module>
+        <module>seckill-activity</module>
+        <module>seckill-data</module>
     </modules>
     <!--父项目要修改打包方式-->
     <packaging>pom</packaging>

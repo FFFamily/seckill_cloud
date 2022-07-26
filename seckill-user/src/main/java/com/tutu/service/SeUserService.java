@@ -1,24 +1,21 @@
 package com.tutu.service;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.tutu.common.enums.UserTypeEnum;
 import com.tutu.common.exception.BusinessException;
 import com.tutu.common.exception.LoginException;
 import com.tutu.common.response.BaseResponse;
 import com.tutu.dto.TokenDto;
-import com.tutu.entity.JwtToken;
 import com.tutu.entity.SeUser;
 import com.tutu.feign.UserFeign;
 import com.tutu.mapper.SeUserMapper;
 import com.tutu.vo.LoginVo;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -68,6 +65,9 @@ public class SeUserService {
         log.info("登录--开始，参数为：{}", vo);
         BaseResponse<TokenDto> res = userFeign.getToken("password", vo.getPhone(), vo.getPassWord(), "123456", "client-app");
         TokenDto data = res.getData();
+        if (ObjectUtil.isNull(data)){
+            throw new LoginException("用户名或密码错误");
+        }
         String token = data.getTokenHead() + data.getToken();
         return token;
     }

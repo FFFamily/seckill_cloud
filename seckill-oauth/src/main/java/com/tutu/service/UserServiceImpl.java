@@ -1,13 +1,8 @@
 package com.tutu.service;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.tutu.common.response.BaseResponse;
-import com.tutu.constant.MessageConstant;
 import com.tutu.domain.SeUserDto;
 import com.tutu.domain.SecurityUser;
 import com.tutu.domain.UserDTO;
@@ -15,20 +10,10 @@ import com.tutu.feign.UserFeign;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.authentication.CredentialsExpiredException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 用户信息加载
@@ -50,7 +35,6 @@ public class UserServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("查询用户: {}",username);
         // 查询数据库
         BaseResponse res = userFeign.getUserByUserPhone(username);
         String jsonStr = JSONUtil.toJsonStr(res.getData());
@@ -69,6 +53,7 @@ public class UserServiceImpl implements UserDetailsService {
 //        } else if (!securityUser.isCredentialsNonExpired()) {
 //            throw new CredentialsExpiredException(MessageConstant.CREDENTIALS_EXPIRED);
 //        }
+        log.info("Oauth模块 查询用户: {}，其信息为，{}",username,securityUser);
         return securityUser;
     }
 

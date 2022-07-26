@@ -3,6 +3,7 @@ package com.tutu.filtter;
 import com.tutu.config.IgnoreUrlsConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -27,6 +28,8 @@ public class IgnoreUrlsRemoveJwtFilter implements WebFilter {
      */
     @Autowired
     private IgnoreUrlsConfig ignoreUrlsConfig;
+
+
 
     /**
      * 白名单过滤移除请求头

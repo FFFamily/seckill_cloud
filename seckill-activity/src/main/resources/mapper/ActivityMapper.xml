@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tutu.mapper.ActivityMapper">
+
+
+    <select id="selectListByUserId" resultType="com.example.miaosha.response.UserJoinActListResponse">
+        select suc.id, sc.com_name, sa.act_start, sa.act_end, sa.act_title
+        from se_user_commodity suc
+                 left join se_activity sa on sa.id = suc.act_id
+                 left join se_commodity sc on sc.id = sa.com_id
+        where suc.user_id = #{userId}
+          AND suc.is_deleted = 0
+    </select>
+
+
+</mapper>
