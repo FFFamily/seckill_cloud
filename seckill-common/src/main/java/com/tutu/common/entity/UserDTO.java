@@ -27,5 +27,8 @@ public class UserDTO {
      * 状态
      */
     private Integer status;
+    /**
+     * 角色
+     */
     private List<String> roles;
 }

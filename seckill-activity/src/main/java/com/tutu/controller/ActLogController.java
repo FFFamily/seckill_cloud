@@ -1,13 +1,9 @@
 package com.tutu.controller;
 
-import com.example.miaosha.entity.base.BaseResponse;
-import com.example.miaosha.service.SeActLogService;
-import com.example.miaosha.vo.ActLogListParamVo;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @CrossOrigin(origins = "*")
@@ -16,15 +12,15 @@ import javax.annotation.Resource;
 @RequestMapping("/log")
 public class ActLogController {
 
-    @Resource
-    private SeActLogService seActLogService;
-
-
-    @PostMapping("/getLogByActId")
-    @ApiOperation("查询活动日志列表")
-    public BaseResponse getLogByActId(@RequestBody ActLogListParamVo vo) {
-        return BaseResponse.success(seActLogService.selectList(vo, vo.getActId()));
-    }
+//    @Resource
+//    private SeActLogService seActLogService;
+//
+//
+//    @PostMapping("/getLogByActId")
+//    @ApiOperation("查询活动日志列表")
+//    public BaseResponse getLogByActId(@RequestBody ActLogListParamVo vo) {
+//        return BaseResponse.success(seActLogService.selectList(vo, vo.getActId()));
+//    }
 
 
 }

@@ -2,10 +2,10 @@ package com.tutu.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tutu.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -15,16 +15,13 @@ import java.util.Date;
  */
 @Data
 @TableName("se_activity")
-public class SeActivity implements Serializable {
+public class SeActivity extends BaseEntity {
     private static final long serialVersionUID = 1L;
     @ApiModelProperty("秒杀活动表ID")
     private String id;
 
-//    @ApiModelProperty("商品id")
-//    private String comId;
-
-//    @ApiModelProperty("商品名称")
-//    private String comName;
+    @ApiModelProperty("商品id")
+    private String comId;
 
     @ApiModelProperty("秒杀数量")
     private Integer actNum;
@@ -55,33 +52,13 @@ public class SeActivity implements Serializable {
     @ApiModelProperty("活动详情")
     private String actInfo;
 
-    @ApiModelProperty("创建者编号")
-    private String createBy;
 
-    @ApiModelProperty("创建者名称")
-    private String createByName;
-
-    @ApiModelProperty("创建时间")
-    private String createTime;
-
-    @ApiModelProperty("逻辑删除（1删除/0未删除）")
-    private Boolean isDeleted;
+    /**=====以下是对参与活动的用户的条件限制，本系统只针对涉及到秒杀功能，所以弱化这些参数，只保留一个年龄限制，使得系统的核心主要在于秒杀======*/
 
     @ApiModelProperty(value = "允许参加活动的年龄")
     private Integer limitYear;
 
-    @ApiModelProperty(value = "允许参加的工作状态(1:无业/2:失业/3:就业/4：不做限制)")
-    private Integer workState;
-
-    @ApiModelProperty(value = "允许参加的失信状态(1:未纳入失信名单/2:纳入失信名单/3：不做限制)")
-    private Integer promiseState;
-
-    @ApiModelProperty(value = "允许参加活动的最大逾期次数")
-    private Integer loanTime;
-
-    @ApiModelProperty("是否开启筛选（1开启/0未开启）")
-    private Integer isFitter;
-
     @ApiModelProperty("是否开启链接暴露（1开启/0未开启）")
     private Integer isOpen;
+
 }

@@ -1,13 +1,8 @@
 package com.tutu.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tutu.entity.SeActivity;
-import com.tutu.entity.SeUserCommodity;
-import com.tutu.response.UserJoinActListResponse;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * @author 涂涂
@@ -21,5 +16,5 @@ public interface ActivityMapper extends BaseMapper<SeActivity> {
      * @param id
      * @return
      */
-    IPage<UserJoinActListResponse> selectListByUserId(@Param("page") Page<SeUserCommodity> page, @Param("userId") String id);
+//    IPage<UserJoinActListResponse> selectListByUserId(@Param("page") Page<SeUserCommodity> page, @Param("userId") String id);
 }

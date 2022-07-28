@@ -1,13 +1,13 @@
 package com.tutu.service;
 
 
-import cn.hutool.core.lang.Assert;
-import com.tutu.common.entity.PtUser;
-import com.tutu.common.halder.PtUserContextHolder;
-import com.tutu.common.utils.IdWorkerUtil;
+import com.tutu.common.constants.Constants;
+import com.tutu.common.entity.UserDTO;
+import com.tutu.common.exception.BusinessException;
+import com.tutu.common.halder.UserInfoHandler;
 import com.tutu.entity.SeActivity;
+import com.tutu.entity.SeCommodity;
 import com.tutu.mapper.ActivityMapper;
-import com.tutu.mapper.SeActMoneyMapper;
 import com.tutu.vo.ActivityVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Objects;
 
 /**
  * @author 涂涂
@@ -29,12 +28,17 @@ public class ActivityService {
     @Autowired
     private ActivityMapper activityMapper;
 
+    @Resource
+    private UserInfoHandler userInfoHandler;
 
 //    @Resource
 //    private RedisUtil redisUtil;
 
+//    @Resource
+//    private SeActMoneyMapper seActMoneyMapper;
+
     @Resource
-    private SeActMoneyMapper seActMoneyMapper;
+    private CommodityService commodityService;
 
     /**
      * 创建秒杀活动
@@ -48,32 +52,14 @@ public class ActivityService {
         SeActivity activity = new SeActivity();
         BeanUtils.copyProperties(vo, activity);
         // 拿到当前用户
-        PtUser ptUser = PtUserContextHolder.get();
-        // 校验用户
-        Assert.isTrue(!Objects.isNull(ptUser), "当前用户不存在或未登录");
-        // TODO  添加 活动条件
-        // 活动条件 ID
-        String conId = IdWorkerUtil.nextId();
-
-        // TODO 查询商品表，查看库存是否足够,在正式秒杀前，也得对数量进行判断，否则秒杀不开启
-//        SeCommodity seCommodity = commodityMapper.selectOne(new LambdaQueryWrapper<SeCommodity>()
-//                .eq(SeCommodity::getId, vo.getComId())
-//        );
-//        if(Objects.isNull(seCommodity)){
-//            throw new BusinessException("不存在对应的商品");
-//        }
-//        if(seCommodity.getComStock() < vo.getActNum()){
-//            throw new BusinessException("商品库存不足，不足以支持对应数目的秒杀");
-//        }
-        // 赋值
-        String id = IdWorkerUtil.nextId();
-        activity.setId(id);
-        activity.setCreateBy(ptUser.getId());
-        activity.setCreateByName(ptUser.getUserName());
-        activity.setState(1);
-        // TODO 设置创建时间
+        UserDTO currentUser = userInfoHandler.getCurrentUser();
+        // 查询到商品信息
+        SeCommodity seCommodity = commodityService.findComById(vo.getComId());
+        if(seCommodity.getComStock() < vo.getActNum()){
+            throw new BusinessException("商品库存不足，不足以支持对应数目的秒杀");
+        }
+        activity.setState(Integer.valueOf(Constants.YES));
         activityMapper.insert(activity);
-//        getUrl(id);
         // TODO MQ 发送延迟消息，或者使用spring的定时任务
         log.info("创建存入秒杀活动--结束");
         return activity.getId();

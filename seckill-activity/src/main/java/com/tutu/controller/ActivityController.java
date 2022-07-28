@@ -3,7 +3,6 @@ package com.tutu.controller;
 
 import com.tutu.common.response.BaseResponse;
 import com.tutu.service.ActivityService;
-import com.tutu.service.UserCommodityService;
 import com.tutu.vo.ActivityVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,8 +25,6 @@ public class ActivityController {
     @Autowired
     private ActivityService activityService;
 
-    @Autowired
-    private UserCommodityService userCommodityService;
 
     @ApiOperation("创建秒杀活动")
     @PostMapping("/create")

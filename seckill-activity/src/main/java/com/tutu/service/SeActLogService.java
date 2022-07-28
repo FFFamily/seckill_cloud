@@ -1,9 +1,5 @@
 package com.tutu.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.tutu.entity.SeActLog;
 import com.tutu.mapper.SeActLogMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,10 +24,10 @@ public class SeActLogService {
      * @param vo
      * @return
      */
-    public BasePage selectList(ActLogListParamVo vo, String actId) {
-        Page<SeActLog> page = new Page<>(vo.getPageNum(), vo.getPageSize());
-        IPage<SeActLog> seActLogIPage = seActLogMapper.selectPage(page,
-                new LambdaQueryWrapper<SeActLog>().eq(SeActLog::getActId, actId));
-        return BasePage.getPage(seActLogIPage);
-    }
+//    public BasePage selectList(ActLogListParamVo vo, String actId) {
+//        Page<SeActLog> page = new Page<>(vo.getPageNum(), vo.getPageSize());
+//        IPage<SeActLog> seActLogIPage = seActLogMapper.selectPage(page,
+//                new LambdaQueryWrapper<SeActLog>().eq(SeActLog::getActId, actId));
+//        return BasePage.getPage(seActLogIPage);
+//    }
 }

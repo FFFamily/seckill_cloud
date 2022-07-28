@@ -14,6 +14,10 @@ import java.util.Date;
  */
 @Data
 public class ActivityVo {
+
+    @ApiModelProperty("商品id")
+    private String comId;
+
     @ApiModelProperty("秒杀数量")
     @NotNull(message = "数量不能为空")
     private Integer actNum;
@@ -42,21 +46,9 @@ public class ActivityVo {
     @ApiModelProperty("活动须知")
     private String actKnow;
 
-
     @ApiModelProperty(value = "允许参加活动的年龄")
     private Integer limitYear;
 
-    @ApiModelProperty(value = "允许参加的工作状态(1:无业/2:失业/3:就业/4：不做限制)")
-    private Integer workState;
-
-    @ApiModelProperty(value = "允许参加的失信状态(1:未纳入失信名单/2:纳入失信名单/3：不做限制)")
-    private Integer promiseState;
-
-    @ApiModelProperty(value = "允许参加活动的最大逾期次数")
-    private Integer loanTime;
-
-    @ApiModelProperty(value = "是否开启筛选（1开启/0未开启）")
-    private Integer isFitter;
 
     @ApiModelProperty("是否开启链接暴露（1开启/0未开启）")
     private Integer isOpen;
