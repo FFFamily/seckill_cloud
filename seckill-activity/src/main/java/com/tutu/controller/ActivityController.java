@@ -29,8 +29,8 @@ public class ActivityController {
     @ApiOperation("创建秒杀活动")
     @PostMapping("/create")
     public BaseResponse createActivity(@RequestBody @Validated ActivityVo vo) {
-        String acticityId = activityService.save(vo);
-        return BaseResponse.success(acticityId);
+        activityService.save(vo);
+        return BaseResponse.SUCCESS;
     }
 
 //    @ApiOperation("删除秒杀活动")

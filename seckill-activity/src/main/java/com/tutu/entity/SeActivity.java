@@ -1,5 +1,7 @@
 package com.tutu.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutu.common.entity.BaseEntity;
@@ -18,6 +20,7 @@ import java.util.Date;
 public class SeActivity extends BaseEntity {
     private static final long serialVersionUID = 1L;
     @ApiModelProperty("秒杀活动表ID")
+    @TableId(type = IdType.UUID)
     private String id;
 
     @ApiModelProperty("商品id")

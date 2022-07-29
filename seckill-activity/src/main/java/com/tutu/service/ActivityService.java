@@ -47,7 +47,7 @@ public class ActivityService {
      * @return
      */
     @Transactional
-    public String save(ActivityVo vo) {
+    public void save(ActivityVo vo) {
         log.info("创建存入秒杀活动--开始，传入的参数为：{}", vo);
         SeActivity activity = new SeActivity();
         BeanUtils.copyProperties(vo, activity);
@@ -58,11 +58,10 @@ public class ActivityService {
         if(seCommodity.getComStock() < vo.getActNum()){
             throw new BusinessException("商品库存不足，不足以支持对应数目的秒杀");
         }
-        activity.setState(Integer.valueOf(Constants.YES));
+        activity.setState(Integer.valueOf(Constants.NO));
         activityMapper.insert(activity);
         // TODO MQ 发送延迟消息，或者使用spring的定时任务
         log.info("创建存入秒杀活动--结束");
-        return activity.getId();
     }
 
 //    public String getUrl(String id) {

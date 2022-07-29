@@ -1,22 +1,18 @@
-package com.tutu.entity;
+package com.tutu.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.tutu.common.entity.BaseEntity;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 商品实体
- * 本系统对于商品实体信息参数也进行弱化，只展示必须字段
+ * 商品前端传输类
  */
 @Data
-public class SeCommodity extends BaseEntity {
+public class SeCommodityVo implements Serializable {
     /**
      * 商品编号
      */
-    @TableId(type = IdType.UUID)
     private String id;
     /**
      * 商品名称
