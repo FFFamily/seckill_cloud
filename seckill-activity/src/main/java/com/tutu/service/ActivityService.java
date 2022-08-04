@@ -1,6 +1,7 @@
 package com.tutu.service;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.tutu.common.constants.Constants;
 import com.tutu.common.entity.UserDTO;
 import com.tutu.common.exception.BusinessException;
@@ -62,6 +63,20 @@ public class ActivityService {
         activityMapper.insert(activity);
         // TODO MQ 发送延迟消息，或者使用spring的定时任务
         log.info("创建存入秒杀活动--结束");
+    }
+
+    /**
+     * 根据活动编号查询活动信息
+     * @param actId
+     * @return
+     */
+    public SeActivity findActivityById(String actId) {
+        SeActivity seActivity = activityMapper.selectOne(new LambdaQueryWrapper<SeActivity>().eq(SeActivity::getId, actId));
+        if (seActivity == null){
+            // todo 这里活动超时的查询也要添加进去
+            throw new RuntimeException("活动不存在或者已经结束");
+        }
+        return seActivity;
     }
 
 //    public String getUrl(String id) {

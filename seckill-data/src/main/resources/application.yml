@@ -1,6 +1,19 @@
 spring:
+  application:
+    name: data
+  profiles:
+      active: dev
   redis:
-    database: 0
     port: 6379
     host: localhost
     password:
+  rabbitmq:
+    virtual-host: /
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+mq:
+  defaultExchange: actExchange
+  queue: queue
+  routeKey: queue_key

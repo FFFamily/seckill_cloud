@@ -2,6 +2,7 @@ package com.tutu.controller;
 
 
 import com.tutu.common.response.BaseResponse;
+import com.tutu.entity.SeActivity;
 import com.tutu.service.ActivityService;
 import com.tutu.vo.ActivityVo;
 import io.swagger.annotations.Api;
@@ -45,11 +46,11 @@ public class ActivityController {
 //        return BaseResponse.success(userCommodityService.findAllActivitys(vo));
 //    }
 //
-//    @ApiOperation("查看具体的活动")
-//    @GetMapping("/getAct")
-//    public BaseResponse getAct(String actId) {
-//        return BaseResponse.success(userCommodityService.findActivity(actId));
-//    }
+    @ApiOperation("查看具体的活动")
+    @GetMapping("/getAct/{id}")
+    public BaseResponse<SeActivity> getAct(@PathVariable(value = "id") String actId) {
+        return BaseResponse.success(activityService.findActivityById(actId));
+    }
 //
 //    @ApiOperation("预先装载数据")
 //    @PostMapping("/beforePut")

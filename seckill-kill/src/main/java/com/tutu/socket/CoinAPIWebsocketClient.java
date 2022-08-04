@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -55,8 +54,6 @@ public class CoinAPIWebsocketClient extends WebSocketClient {
         }
     }
 
-    @Autowired
-    private TradeKLineEvent tradeKLineEvent;
 
     public CoinAPIWebsocketClient() {
         super(serverUri);
@@ -117,7 +114,6 @@ public class CoinAPIWebsocketClient extends WebSocketClient {
         log.info("连接出现异常：{}", ex.getMessage());
         ex.printStackTrace();
         log.info("准备重新建立 webSocket 连接");
-        tradeKLineEvent.handle();
     }
 
 
