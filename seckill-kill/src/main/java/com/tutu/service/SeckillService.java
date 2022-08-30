@@ -47,7 +47,7 @@ public class SeckillService {
      * 秒杀方法
      * @param vo
      */
-    public void seckill(SeckillVo vo) {
+    public void wseckill(SeckillVo vo) {
         // 秒杀流程开始
         // 1.过滤-非参与秒杀活动的用户不能参加秒杀活动，这个功能通过前端控制
         // 1。1 用户访问秒杀页面的时候，会返回一个字段，判断其有没有参与这个活动，没有参与则不能点击秒杀按钮
