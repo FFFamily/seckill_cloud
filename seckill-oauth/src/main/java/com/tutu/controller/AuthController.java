@@ -1,6 +1,7 @@
 package com.tutu.controller;
 
 import com.tutu.common.response.BaseResponse;
+import com.tutu.common.utils.RedisUtil;
 import com.tutu.domain.Oauth2TokenDto;
 import com.tutu.feign.OauthFeign;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.security.Principal;
 import java.util.Map;
 
@@ -23,17 +25,24 @@ import java.util.Map;
 public class AuthController implements OauthFeign {
     @Autowired
     private TokenEndpoint tokenEndpoint;
+    @Resource
+    private RedisUtil redisUtil;
     /**
      * Oauth2登录认证
      */
     @RequestMapping(value = "/token", method = RequestMethod.POST)
     public BaseResponse<Oauth2TokenDto> postAccessToken(Principal principal, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
         OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
+        Map<String, Object> additionalInformation = oAuth2AccessToken.getAdditionalInformation();
+        String id = additionalInformation.get("id").toString();
+        // 存储Redis
+        redisUtil.set(id,oAuth2AccessToken.getValue(),oAuth2AccessToken.getExpiresIn());
         Oauth2TokenDto oauth2TokenDto = Oauth2TokenDto.builder()
                 .token(oAuth2AccessToken.getValue())
                 .refreshToken(oAuth2AccessToken.getRefreshToken().getValue())
                 .expiresIn(oAuth2AccessToken.getExpiresIn())
-                .tokenHead("Bearer ").build();
+                .tokenHead("Bearer ")
+                .build();
         return BaseResponse.success(oauth2TokenDto);
     }
 

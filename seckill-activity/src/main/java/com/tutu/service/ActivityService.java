@@ -1,14 +1,17 @@
 package com.tutu.service;
 
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tutu.common.constants.Constants;
-import com.tutu.common.entity.UserDTO;
 import com.tutu.common.exception.BusinessException;
-import com.tutu.common.halder.UserInfoHandler;
 import com.tutu.entity.SeActivity;
 import com.tutu.entity.SeCommodity;
 import com.tutu.mapper.ActivityMapper;
+import com.tutu.vo.ActivityListParamVo;
 import com.tutu.vo.ActivityVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -30,15 +33,6 @@ public class ActivityService {
     private ActivityMapper activityMapper;
 
     @Resource
-    private UserInfoHandler userInfoHandler;
-
-//    @Resource
-//    private RedisUtil redisUtil;
-
-//    @Resource
-//    private SeActMoneyMapper seActMoneyMapper;
-
-    @Resource
     private CommodityService commodityService;
 
     /**
@@ -53,7 +47,7 @@ public class ActivityService {
         SeActivity activity = new SeActivity();
         BeanUtils.copyProperties(vo, activity);
         // 拿到当前用户
-        UserDTO currentUser = userInfoHandler.getCurrentUser();
+//        UserDTO currentUser = userInfoHandler.getCurrentUser();
         // 查询到商品信息
         SeCommodity seCommodity = commodityService.findComById(vo.getComId());
         if(seCommodity.getComStock() < vo.getActNum()){
@@ -77,6 +71,35 @@ public class ActivityService {
             throw new RuntimeException("活动不存在或者已经结束");
         }
         return seActivity;
+    }
+
+    /**
+     * 根据活动编号删除活动
+     * @param id
+     * @return
+     */
+    public SeActivity deleteById(String id) {
+        SeActivity seActivity = activityMapper.selectOne(new LambdaQueryWrapper<SeActivity>().eq(SeActivity::getId, id));
+        if (ObjectUtil.isNull(seActivity)){
+            throw new BusinessException("对应活动不存在");
+        }
+        activityMapper.deleteById(id);
+        return seActivity;
+    }
+
+    /**
+     * 条件查询活动列表
+     *
+     * @param vo
+     * @return
+     */
+    public IPage<SeActivity> findAllActivities(ActivityListParamVo vo) {
+        Page page = new Page(vo.getPageNum(),vo.getPageSize());
+        IPage<SeActivity> seActivityIPage = activityMapper.selectPage(page,
+                new LambdaQueryWrapper<SeActivity>()
+                        .eq(StrUtil.isNotBlank(vo.getComId()), SeActivity::getComId, vo.getComId())
+                        .eq(StrUtil.isNotBlank(vo.getActTitle()), SeActivity::getActTitle, vo.getActTitle()));
+        return seActivityIPage;
     }
 
 //    public String getUrl(String id) {

@@ -2,7 +2,6 @@ package com.tutu.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tutu.common.entity.RedisKeys;
-import com.tutu.common.entity.UserDTO;
 import com.tutu.common.enums.RedisEnums;
 import com.tutu.common.exception.BusinessException;
 import com.tutu.common.halder.UserInfoHandler;
@@ -17,7 +16,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -52,8 +50,7 @@ public class SeckillService {
         // 1.过滤-非参与秒杀活动的用户不能参加秒杀活动，这个功能通过前端控制
         // 1。1 用户访问秒杀页面的时候，会返回一个字段，判断其有没有参与这个活动，没有参与则不能点击秒杀按钮
         // 1.2 获取当前用户
-        UserDTO currentUser = userInfoHandler.getCurrentUser();
-        Assert.isTrue(!Objects.isNull(currentUser), "用户不存在");
+        String userId = UserInfoHandler.getUserId();
         // 获取锁
 //        RLock lock = redissonClient.getLock(vo.getActId());
         ReentrantLock lock = new ReentrantLock(false);
@@ -174,11 +171,11 @@ public class SeckillService {
             }
             // 秒杀成功
             // KEY 需要设置为 userId-ActId
-            String successUser = RedisEnums.USER_JOIN_LIMIT + vo.getActId() + "_" + currentUser.getId();
+            String successUser = RedisEnums.USER_JOIN_LIMIT + vo.getActId() + "_" + userId;
             String successUserInfo = RedisKeys.getSuccessUserInfo(successUser);
             // 不设置过期时间，在活动结束之后就直接移除
             redisUtil.set(successUserInfo, RedisEnums.BUY_NUM);
-            OrderAddDto addDto = new OrderAddDto(vo.getActId(),currentUser.getId(), RedisEnums.BUY_NUM, seckillActivityVo.getPrice());
+            OrderAddDto addDto = new OrderAddDto(vo.getActId(),userId, RedisEnums.BUY_NUM, seckillActivityVo.getPrice());
 
             rabbitTemplate.convertAndSend(mqProperties.getDefaultExchange(), mqProperties.getRouteKey(), JSONObject.toJSONString(addDto));
         } finally {

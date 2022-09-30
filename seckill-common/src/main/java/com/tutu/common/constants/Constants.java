@@ -41,4 +41,8 @@ public interface Constants {
      * 逻辑否
      */
     String NO = "0";
+    /**
+     * 编码格式 UTF8
+     */
+    String UTF8 = "UTF-8";
 }

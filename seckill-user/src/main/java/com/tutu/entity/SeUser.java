@@ -22,7 +22,7 @@ public class SeUser implements Serializable {
     @TableId(type = IdType.UUID)
     private String id;
     /**
-     * 用户名
+     * 用户名 手机号
      */
     private String userName;
     /**

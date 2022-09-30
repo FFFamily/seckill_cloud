@@ -100,4 +100,12 @@ public class RedisUtil {
         return true;
     }
 
+    /**
+     * 判断是否存在key值
+     * @param userKey
+     * @return
+     */
+    public boolean hasKey(Object userKey) {
+        return redisTemplate.hasKey(userKey);
+    }
 }

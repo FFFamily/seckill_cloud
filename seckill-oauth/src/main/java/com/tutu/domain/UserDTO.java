@@ -1,6 +1,5 @@
 package com.tutu.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,5 +27,8 @@ public class UserDTO {
      * 状态
      */
     private Integer status;
-    private List<String> roles;
+    /**
+     * 权限
+     */
+    private List<String>roles;
 }

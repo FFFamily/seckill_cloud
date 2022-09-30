@@ -7,6 +7,7 @@ import com.tutu.common.enums.UserTypeEnum;
 import com.tutu.common.exception.BusinessException;
 import com.tutu.common.exception.LoginException;
 import com.tutu.common.response.BaseResponse;
+import com.tutu.common.utils.RedisUtil;
 import com.tutu.dto.TokenDto;
 import com.tutu.entity.SeUser;
 import com.tutu.feign.UserFeign;
@@ -43,6 +44,8 @@ public class SeUserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private RedisUtil redisUtil;
 
     /**
      * 根据手机号查询用户
@@ -62,13 +65,23 @@ public class SeUserService {
      * @return
      */
     public String login(LoginVo vo) {
-        log.info("登录--开始，参数为：{}", vo);
+        log.info("登录，参数为：{}", vo);
+        SeUser seUser = seUserMapper.selectOne(new LambdaQueryWrapper<SeUser>().eq(SeUser::getPhone, vo.getPhone()));
+        if (seUser == null){
+            throw new LoginException("用户不存在");
+        }
+        if (redisUtil.hasKey(seUser.getId())) {
+            log.error("重复用户的Token为 : {}",redisUtil.get(seUser.getId()));
+            redisUtil.remove(seUser.getId());
+            throw new LoginException("用户已登录,请不要重复登录");
+        }
         BaseResponse<TokenDto> res = userFeign.getToken("password", vo.getPhone(), vo.getPassWord(), "123456", "client-app");
         TokenDto data = res.getData();
         if (ObjectUtil.isNull(data)){
             throw new LoginException("用户名或密码错误");
         }
         String token = data.getTokenHead() + data.getToken();
+        log.info("登录结束");
         return token;
     }
 

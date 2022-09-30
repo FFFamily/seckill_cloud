@@ -4,6 +4,7 @@ package com.tutu.controller;
 import com.tutu.common.response.BaseResponse;
 import com.tutu.entity.SeActivity;
 import com.tutu.service.ActivityService;
+import com.tutu.vo.ActivityListParamVo;
 import com.tutu.vo.ActivityVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,18 +35,18 @@ public class ActivityController {
         return BaseResponse.SUCCESS;
     }
 
-//    @ApiOperation("删除秒杀活动")
-//    @PostMapping("/delete")
-//    public BaseResponse delActivity(@RequestBody ActivityPutVo vo) {
-//        return activityService.delete(vo.getActId());
-//    }
-//
-//    @ApiOperation("查看所有的活动活动列表")
-//    @PostMapping("/list")
-//    public BaseResponse getAllActivitys(ActivitylistParamVo vo) {
-//        return BaseResponse.success(userCommodityService.findAllActivitys(vo));
-//    }
-//
+    @ApiOperation("删除秒杀活动")
+    @PostMapping("/delete/{id}")
+    public BaseResponse delActivity(@PathVariable(value = "id") String id) {
+        return BaseResponse.success(activityService.deleteById(id));
+    }
+
+    @ApiOperation("查看所有的活动活动列表")
+    @PostMapping("/list")
+    public BaseResponse getAllActivitys(ActivityListParamVo vo) {
+        return BaseResponse.success(activityService.findAllActivities(vo));
+    }
+
     @ApiOperation("查看具体的活动")
     @GetMapping("/getAct/{id}")
     public BaseResponse<SeActivity> getAct(@PathVariable(value = "id") String actId) {
