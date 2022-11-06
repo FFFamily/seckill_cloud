@@ -3,6 +3,8 @@ package com.tutu.common.interceptor;
 import com.tutu.common.constants.AuthConstant;
 import com.tutu.common.halder.UserInfoHandler;
 import com.tutu.common.utils.ServletUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
@@ -13,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
  * 拦截器：从请求头中拿到用户信息
  * todo 其实还可以做用户刷新
  */
+@Slf4j
+@Component
 public class HeaderUserInfoInterceptor implements AsyncHandlerInterceptor {
 
     @Override
@@ -27,6 +31,6 @@ public class HeaderUserInfoInterceptor implements AsyncHandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         // 移除 对应的 ThreadLocal
-        UserInfoHandler.remove();
+//        UserInfoHandler.remove();
     }
 }

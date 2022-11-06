@@ -8,10 +8,11 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 用户信息获取
  */
+
 public class UserInfoHandler {
     private static final ThreadLocal<Map<String, Object>> THREAD_LOCAL = new ThreadLocal<>();
     private static final String EMPTY = "";
-    private static final String DETAILS_USER_ID = "id";
+    private static final String DETAILS_USER_ID = "userId";
     private static final String DETAILS_USERNAME = "userName";
 
     public static void set(String key, Object value) {

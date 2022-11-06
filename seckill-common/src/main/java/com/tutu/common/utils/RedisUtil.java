@@ -1,10 +1,10 @@
 package com.tutu.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +22,7 @@ public class RedisUtil {
      */
     public static final int TTL_MIN_3 = 1800;
 
-    @Autowired
+    @Resource
     private RedisTemplate redisTemplate;
 
     /**

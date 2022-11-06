@@ -7,11 +7,11 @@ public interface Constants {
     /**
      * Http成功状态码
      */
-    String SUCCESS = "1";
+    Integer SUCCESS = 0;
     /**
      * Http失败状态码
      */
-    String ERROR = "-1";
+    Integer ERROR = -1;
 
     /**
      * 令牌

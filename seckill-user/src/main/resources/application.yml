@@ -15,7 +15,7 @@ spring:
         server-addr: 127.0.0.1:8848
   datasource:
     username: root
-    password: root
+    password: 123456
     # ?serverTimezone=UTC解决时区的报错
     url: jdbc:mysql://127.0.0.1:3306/seckill?serverTimezone=GMT&useSSL=true
     driver-class-name: com.mysql.cj.jdbc.Driver

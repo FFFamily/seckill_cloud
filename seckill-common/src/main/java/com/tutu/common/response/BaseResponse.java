@@ -1,5 +1,6 @@
 package com.tutu.common.response;
 
+import com.tutu.common.constants.Constants;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,10 +13,9 @@ import java.io.Serializable;
  */
 @Data
 public class BaseResponse<T> implements Serializable {
-    private static final Integer SUCCESS_CODE = 0;
-    private static final Integer ERROR_CODE = -1;
-    private static final Integer WARNING_CODE = 1;
-    private static final Integer AUTHORIZE_CODE = 100000;
+    // 只会用到成功和失败
+    private static final Integer SUCCESS_CODE = Constants.SUCCESS;
+    private static final Integer ERROR_CODE = Constants.ERROR;
     private static final String SUCCESS_MSG = "请求成功！";
     public static final BaseResponse<String> SUCCESS = new BaseResponse(SUCCESS_CODE, SUCCESS_MSG, null);
     private static final String ERROR_MSG = "服务器繁忙！";
@@ -54,19 +54,4 @@ public class BaseResponse<T> implements Serializable {
         return result(ERROR_CODE, msg, data);
     }
 
-    public static <T> BaseResponse<T> warning(String msg) {
-        return result(WARNING_CODE, msg, null);
-    }
-
-    public static <T> BaseResponse<T> warning(String msg, T data) {
-        return result(WARNING_CODE, msg, data);
-    }
-
-    public static <T> BaseResponse<T> authorize(String msg) {
-        return result(AUTHORIZE_CODE, msg, null);
-    }
-
-    public static <T> BaseResponse<T> authorize(String msg, T data) {
-        return result(AUTHORIZE_CODE, msg, data);
-    }
 }

@@ -8,13 +8,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tutu.common.constants.Constants;
 import com.tutu.common.exception.BusinessException;
+import com.tutu.common.halder.UserInfoHandler;
+import com.tutu.common.utils.CopyUtil;
 import com.tutu.entity.SeActivity;
 import com.tutu.entity.SeCommodity;
 import com.tutu.mapper.ActivityMapper;
 import com.tutu.vo.ActivityListParamVo;
 import com.tutu.vo.ActivityVo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,9 +46,9 @@ public class ActivityService {
     public void save(ActivityVo vo) {
         log.info("创建存入秒杀活动--开始，传入的参数为：{}", vo);
         SeActivity activity = new SeActivity();
-        BeanUtils.copyProperties(vo, activity);
+        CopyUtil.Copy(vo,activity);
         // 拿到当前用户
-//        UserDTO currentUser = userInfoHandler.getCurrentUser();
+        String userId = UserInfoHandler.getUserId();
         // 查询到商品信息
         SeCommodity seCommodity = commodityService.findComById(vo.getComId());
         if(seCommodity.getComStock() < vo.getActNum()){
