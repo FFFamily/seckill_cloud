@@ -10,7 +10,7 @@ import com.tutu.common.response.BaseResponse;
 import com.tutu.common.utils.RedisUtil;
 import com.tutu.common.utils.ResponseUtil;
 import com.tutu.user.dto.TokenDto;
-import com.tutu.user.entity.SeUser;
+import com.tutu.user.entity.User;
 import com.tutu.user.feign.UserFeign;
 import com.tutu.user.mapper.SeUserMapper;
 import com.tutu.user.vo.LoginVo;
@@ -54,9 +54,9 @@ public class SeUserService {
      * @param phone
      * @return
      */
-    public SeUser findUserByPhone(String phone) {
-        SeUser seUser = seUserMapper.selectOne(new LambdaQueryWrapper<SeUser>().eq(SeUser::getPhone, phone));
-        return seUser;
+    public User findUserByPhone(String phone) {
+        User user = seUserMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getPhone, phone));
+        return user;
     }
 
     /**
@@ -67,18 +67,18 @@ public class SeUserService {
      */
     public String login(LoginVo vo) {
         log.info("登录，参数为：{}", vo);
-        SeUser seUser = seUserMapper.selectOne(new LambdaQueryWrapper<SeUser>().eq(SeUser::getPhone, vo.getPhone()));
-        if (seUser == null){
+        User user = seUserMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getPhone, vo.getPhone()));
+        if (user == null) {
             throw new LoginException("用户不存在");
         }
-        if (redisUtil.hasKey(seUser.getId())) {
-            log.error("重复用户的Token为 : {}",redisUtil.get(seUser.getId()));
-            redisUtil.remove(seUser.getId());
+        if (redisUtil.hasKey(user.getId())) {
+            log.error("重复用户的Token为 : {}", redisUtil.get(user.getId()));
+            redisUtil.remove(user.getId());
             throw new LoginException("用户已登录,请不要重复登录");
         }
         BaseResponse<TokenDto> res = userFeign.getToken("password", vo.getPhone(), vo.getPassWord(), "123456", "client-app");
         TokenDto data = ResponseUtil.getData(res);
-        if (ObjectUtil.isNull(data)){
+        if (ObjectUtil.isNull(data)) {
             throw new LoginException("用户名或密码错误");
         }
         String token = data.getTokenHead() + data.getToken();
@@ -94,14 +94,14 @@ public class SeUserService {
      */
     public String register(LoginVo vo) {
         log.info("注册--开始，参数为：{}", vo);
-        SeUser seUser = seUserMapper.selectOne(
-                new LambdaQueryWrapper<SeUser>().eq(SeUser::getPhone, vo.getPhone())
+        User seUser = seUserMapper.selectOne(
+                new LambdaQueryWrapper<User>().eq(User::getPhone, vo.getPhone())
         );
         if (Objects.nonNull(seUser)) {
             //TODO 需要返回给前端错误信息
             throw new BusinessException("手机号被使用，请重新注册");
         }
-        SeUser user = new SeUser();
+        User user = new User();
         BeanUtils.copyProperties(vo, user);
         user.setIsAdmin(UserTypeEnum.USER.getCode());
         user.setYear((int) (15 + Math.random() * (80 - 15) + 1));
@@ -134,8 +134,8 @@ public class SeUserService {
     /**
      * 更新用户IP
      */
-    public void updateUser(SeUser seUser) {
-        seUserMapper.updateById(seUser);
+    public void updateUser(User user) {
+        seUserMapper.updateById(user);
     }
 
     /**
@@ -144,16 +144,17 @@ public class SeUserService {
      * @param id
      * @return
      */
-    public SeUser findUserById(String id) {
-        return seUserMapper.selectOne(new LambdaQueryWrapper<SeUser>().eq(SeUser::getId, id));
+    public User findUserById(String id) {
+        return seUserMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getId, id));
     }
 
     /**
      * 获取用户通过用户名
+     *
      * @param userName
      * @return
      */
-    public SeUser findUserByName(String userName) {
-        return seUserMapper.selectOne(new LambdaQueryWrapper<SeUser>().eq(SeUser::getUserName, userName));
+    public User findUserByName(String userName) {
+        return seUserMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserName, userName));
     }
 }

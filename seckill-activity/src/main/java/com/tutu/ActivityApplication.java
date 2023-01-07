@@ -8,6 +8,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient // 服务注册
 public class ActivityApplication {
     public static void main(String[] args) {
+
+
         SpringApplication.run(ActivityApplication.class, args);
     }
 }

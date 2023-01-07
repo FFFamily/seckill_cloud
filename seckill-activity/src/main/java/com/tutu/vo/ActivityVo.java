@@ -16,6 +16,7 @@ import java.util.Date;
 public class ActivityVo {
 
     @ApiModelProperty("商品id")
+    @NotNull(message = "秒杀活动必须要有商品")
     private String comId;
 
     @ApiModelProperty("秒杀数量")
@@ -28,12 +29,12 @@ public class ActivityVo {
 
     @ApiModelProperty("活动时间")
     @NotNull(message = "必须有活动时间")
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date actStart;
 
     @ApiModelProperty("活动结束时间")
     @NotNull(message = "必须有活动结束时间")
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date actEnd;
 
     @ApiModelProperty("活动名称")
@@ -49,7 +50,6 @@ public class ActivityVo {
     @ApiModelProperty(value = "允许参加活动的年龄")
     private Integer limitYear;
 
-
     @ApiModelProperty("是否开启链接暴露（1开启/0未开启）")
-    private Integer isOpen;
+    private boolean isOpen;
 }

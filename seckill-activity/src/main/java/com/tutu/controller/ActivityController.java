@@ -2,7 +2,7 @@ package com.tutu.controller;
 
 
 import com.tutu.common.response.BaseResponse;
-import com.tutu.entity.SeActivity;
+import com.tutu.entity.Activity;
 import com.tutu.service.ActivityService;
 import com.tutu.vo.ActivityListParamVo;
 import com.tutu.vo.ActivityVo;
@@ -49,7 +49,7 @@ public class ActivityController {
 
     @ApiOperation("查看具体的活动")
     @GetMapping("/getAct/{id}")
-    public BaseResponse<SeActivity> getAct(@PathVariable(value = "id") String actId) {
+    public BaseResponse<Activity> getAct(@PathVariable(value = "id") String actId) {
         return BaseResponse.success(activityService.findActivityById(actId));
     }
 //

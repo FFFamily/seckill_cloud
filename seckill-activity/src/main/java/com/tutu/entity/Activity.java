@@ -3,13 +3,11 @@ package com.tutu.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutu.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @Author
@@ -17,7 +15,7 @@ import java.util.Date;
  */
 @Data
 @TableName("se_activity")
-public class SeActivity extends BaseEntity {
+public class Activity extends BaseEntity {
     private static final long serialVersionUID = 1L;
     @ApiModelProperty("秒杀活动表ID")
     @TableId(type = IdType.UUID)
@@ -36,12 +34,10 @@ public class SeActivity extends BaseEntity {
     private String actTitle;
 
     @ApiModelProperty("活动时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT")
-    private Date actStart;
+    private String actStart;
 
     @ApiModelProperty("活动结束时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT")
-    private Date actEnd;
+    private String actEnd;
 
     @ApiModelProperty("活动状态（1：启用,0：关闭）")
     private Integer state;

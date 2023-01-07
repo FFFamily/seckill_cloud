@@ -1,14 +1,14 @@
 package com.tutu.vo;
 
 import com.tutu.common.entity.LimitVo;
-import com.tutu.entity.SeActivity;
+import com.tutu.entity.Activity;
 import lombok.Data;
 
 /**
  * 查询活动集合参数
  */
 @Data
-public class ActivityListParamVo extends LimitVo<SeActivity> {
+public class ActivityListParamVo extends LimitVo<Activity> {
     /**
      * 商品编号
      */

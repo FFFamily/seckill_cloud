@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 @Data
-public class SeActivityDto implements Serializable {
+public class ActivityDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

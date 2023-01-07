@@ -13,6 +13,6 @@ public class CopyUtil {
      * @param target
      */
     public static void Copy(Object resource,Object target){
-        BeanUtils.copyProperties(resource,resource);
+        BeanUtils.copyProperties(resource, target);
     }
 }

@@ -1,4 +1,4 @@
-package com.tutu.user.entity.handler;
+package com.tutu.user.exception.handler;
 
 import com.tutu.common.response.BaseResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;

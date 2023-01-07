@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class SeOrder implements Serializable {
+public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * 订单表ID

@@ -1,14 +1,14 @@
 package com.tutu.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tutu.entity.SeActivity;
+import com.tutu.entity.Activity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @author 涂涂
  */
 @Mapper
-public interface ActivityMapper extends BaseMapper<SeActivity> {
+public interface ActivityMapper extends BaseMapper<Activity> {
     /**
      * 分页查询活动列表
      *

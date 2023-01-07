@@ -2,7 +2,7 @@ package com.tutu.user.feign;
 
 import com.tutu.common.response.BaseResponse;
 import com.tutu.user.dto.TokenDto;
-import com.tutu.user.entity.handler.VodClientDefeat;
+import com.tutu.user.exception.handler.VodClientDefeat;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;

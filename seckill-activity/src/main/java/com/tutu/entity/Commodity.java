@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * 本系统对于商品实体信息参数也进行弱化，只展示必须字段
  */
 @Data
-public class SeCommodity extends BaseEntity {
+public class Commodity extends BaseEntity {
     /**
      * 商品编号
      */

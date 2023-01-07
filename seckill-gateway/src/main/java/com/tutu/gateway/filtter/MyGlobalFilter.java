@@ -156,7 +156,7 @@ public class MyGlobalFilter implements GlobalFilter, Ordered {
      */
     private Mono<Void> error(ServerWebExchange exchange, String msg,Object object) {
         ServerHttpResponse response = exchange.getResponse();
-        HttpStatus status = HttpStatus.OK;
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
         response.setStatusCode(status);
         response.getHeaders().add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         BaseResponse<Object> error = BaseResponse.error(msg, object);

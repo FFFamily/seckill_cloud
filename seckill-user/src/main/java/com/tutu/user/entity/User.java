@@ -14,13 +14,17 @@ import java.math.BigDecimal;
  * @Date 2021/12/28 16:56
  */
 @Data
-public class SeUser implements Serializable {
+public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * 用户id
      */
     @TableId(type = IdType.UUID)
     private String id;
+    /**
+     * 用户角色
+     */
+    private Integer role;
     /**
      * 用户名 手机号
      */

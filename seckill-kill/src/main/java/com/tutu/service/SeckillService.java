@@ -7,8 +7,8 @@ import com.tutu.common.exception.BusinessException;
 import com.tutu.common.halder.UserInfoHandler;
 import com.tutu.common.utils.RedisUtil;
 import com.tutu.config.MqProperties;
+import com.tutu.dto.ActivityDto;
 import com.tutu.dto.OrderAddDto;
-import com.tutu.dto.SeActivityDto;
 import com.tutu.feign.ActivityFeign;
 import com.tutu.vo.SeckillActivityVo;
 import com.tutu.vo.SeckillVo;
@@ -81,7 +81,7 @@ public class SeckillService {
             // 2.2 查询该活动
             if (Objects.isNull(seckillActivityVo)) {
                 // 远程调用
-                SeActivityDto seActivity = (SeActivityDto) activityFeign.getActivityInfo(vo.getActId()).getData();
+                ActivityDto seActivity = (ActivityDto) activityFeign.getActivityInfo(vo.getActId()).getData();
 //                SeActivityDto seActivity = activityJson.toJavaObject(SeActivityDto.class);
 //                SeActivityDto seActivity = activityService.getOne(vo.getActId());
                 if (Objects.isNull(seActivity)) {

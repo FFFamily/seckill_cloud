@@ -10,8 +10,8 @@ import com.tutu.common.constants.Constants;
 import com.tutu.common.exception.BusinessException;
 import com.tutu.common.halder.UserInfoHandler;
 import com.tutu.common.utils.CopyUtil;
-import com.tutu.entity.SeActivity;
-import com.tutu.entity.SeCommodity;
+import com.tutu.entity.Activity;
+import com.tutu.entity.Commodity;
 import com.tutu.mapper.ActivityMapper;
 import com.tutu.vo.ActivityListParamVo;
 import com.tutu.vo.ActivityVo;
@@ -45,13 +45,14 @@ public class ActivityService {
     @Transactional
     public void save(ActivityVo vo) {
         log.info("创建存入秒杀活动--开始，传入的参数为：{}", vo);
-        SeActivity activity = new SeActivity();
-        CopyUtil.Copy(vo,activity);
+        Activity activity = new Activity();
+        CopyUtil.Copy(vo, activity);
         // 拿到当前用户
         String userId = UserInfoHandler.getUserId();
         // 查询到商品信息
-        SeCommodity seCommodity = commodityService.findComById(vo.getComId());
-        if(seCommodity.getComStock() < vo.getActNum()){
+        Commodity commodity = commodityService.findComById(vo.getComId());
+        // TODO 查询所有 查询所有包含该商品的活动所销售的商品数量
+        if (commodity.getComStock() < vo.getActNum()) {
             throw new BusinessException("商品库存不足，不足以支持对应数目的秒杀");
         }
         activity.setState(Integer.valueOf(Constants.NO));
@@ -62,30 +63,32 @@ public class ActivityService {
 
     /**
      * 根据活动编号查询活动信息
+     *
      * @param actId
      * @return
      */
-    public SeActivity findActivityById(String actId) {
-        SeActivity seActivity = activityMapper.selectOne(new LambdaQueryWrapper<SeActivity>().eq(SeActivity::getId, actId));
-        if (seActivity == null){
+    public Activity findActivityById(String actId) {
+        Activity activity = activityMapper.selectOne(new LambdaQueryWrapper<Activity>().eq(Activity::getId, actId));
+        if (activity == null) {
             // todo 这里活动超时的查询也要添加进去
             throw new RuntimeException("活动不存在或者已经结束");
         }
-        return seActivity;
+        return activity;
     }
 
     /**
      * 根据活动编号删除活动
+     *
      * @param id
      * @return
      */
-    public SeActivity deleteById(String id) {
-        SeActivity seActivity = activityMapper.selectOne(new LambdaQueryWrapper<SeActivity>().eq(SeActivity::getId, id));
-        if (ObjectUtil.isNull(seActivity)){
+    public Activity deleteById(String id) {
+        Activity activity = activityMapper.selectOne(new LambdaQueryWrapper<Activity>().eq(Activity::getId, id));
+        if (ObjectUtil.isNull(activity)) {
             throw new BusinessException("对应活动不存在");
         }
         activityMapper.deleteById(id);
-        return seActivity;
+        return activity;
     }
 
     /**
@@ -94,12 +97,12 @@ public class ActivityService {
      * @param vo
      * @return
      */
-    public IPage<SeActivity> findAllActivities(ActivityListParamVo vo) {
-        Page page = new Page(vo.getPageNum(),vo.getPageSize());
-        IPage<SeActivity> seActivityIPage = activityMapper.selectPage(page,
-                new LambdaQueryWrapper<SeActivity>()
-                        .eq(StrUtil.isNotBlank(vo.getComId()), SeActivity::getComId, vo.getComId())
-                        .eq(StrUtil.isNotBlank(vo.getActTitle()), SeActivity::getActTitle, vo.getActTitle()));
+    public IPage<Activity> findAllActivities(ActivityListParamVo vo) {
+        Page page = new Page(vo.getPageNum(), vo.getPageSize());
+        IPage<Activity> seActivityIPage = activityMapper.selectPage(page,
+                new LambdaQueryWrapper<Activity>()
+                        .eq(StrUtil.isNotBlank(vo.getComId()), Activity::getComId, vo.getComId())
+                        .eq(StrUtil.isNotBlank(vo.getActTitle()), Activity::getActTitle, vo.getActTitle()));
         return seActivityIPage;
     }
 

@@ -19,14 +19,21 @@ import javax.validation.Valid;
 public class CommodityController {
     @Resource
     private CommodityService commodityService;
+
     /**
      * 添加
+     *
      * @param vo
      * @return
      */
     @PostMapping("/create")
-    private BaseResponse add(@RequestBody @Valid SeCommodityVo vo){
+    private BaseResponse add(@RequestBody @Valid SeCommodityVo vo) {
         commodityService.save(vo);
         return BaseResponse.SUCCESS;
+    }
+
+    @PostMapping("/list")
+    private BaseResponse list() {
+        return BaseResponse.success(commodityService.findComList(null));
     }
 }
